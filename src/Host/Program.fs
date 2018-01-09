@@ -11,7 +11,6 @@ let server () =
         let config = ClusterConfiguration.LocalhostPrimarySilo()
         config.AddMemoryStorageProvider() |> ignore
 
-        let t = typeof<HelloGrain>
         let builder = SiloHostBuilder()
                         .UseConfiguration(config)
                         .ConfigureApplicationParts(fun parts -> parts.AddFromAppDomain().WithCodeGeneration() |> ignore) 
