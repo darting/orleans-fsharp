@@ -10,7 +10,9 @@ let worker (client : IClusterClient) =
     task {
         let friend = client.GetGrain<IHello> 0L
         let! response = friend.SayHello ("morning")
-        Console.WriteLine(response)
+        Console.WriteLine response
+        let! rsp2 = friend.SayHello2 "aaa" "bbb"
+        Console.WriteLine rsp2
     }
 
 let creator () =

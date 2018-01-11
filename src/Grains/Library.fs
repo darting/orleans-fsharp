@@ -9,7 +9,7 @@ module Say =
     type HelloGrain () =
         inherit Grain ()
         interface IHello with 
-            member this.SayHello (greet : string) : Task<string> = 
+            member __.SayHello (greet : string) : Task<string> = 
                 greet |> sprintf "hello, %s" |> Task.FromResult
-
-
+            member __.SayHello2 (a : string) (b : string) : Task<string> =
+                a + " - " + b |> Task.FromResult
