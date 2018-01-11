@@ -1,9 +1,9 @@
 ﻿open System
 open Microsoft.Extensions.Logging
-open FSharp.Control.Tasks
 open Orleans
 open Orleans.Runtime.Configuration
 open Orleans.Hosting
+open Giraffe.Tasks
 open Grains.Say
 open Interfaces.Say
 
