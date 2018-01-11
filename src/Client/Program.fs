@@ -1,6 +1,6 @@
 open System
 open Microsoft.Extensions.Logging
-open FSharp.Control.Tasks
+open Giraffe.Tasks
 open Orleans
 open Orleans.Runtime.Configuration
 open Orleans.Hosting

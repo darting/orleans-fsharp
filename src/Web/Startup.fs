@@ -8,7 +8,7 @@ open Microsoft.AspNetCore.Builder
 open Microsoft.AspNetCore.Hosting
 open Microsoft.Extensions.Configuration
 open Microsoft.Extensions.DependencyInjection
-open FSharp.Control.Tasks
+open Giraffe.Tasks
 open Interfaces.Say
 open Microsoft.Extensions.Logging
 open Orleans
