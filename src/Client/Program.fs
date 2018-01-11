@@ -38,5 +38,5 @@ let main argv =
         Console.ReadLine () |> ignore
         do! worker client
     }
-    t.GetAwaiter().GetResult()
+    t.Wait()
     0 // return an integer exit code

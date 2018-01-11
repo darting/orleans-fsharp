@@ -5,6 +5,7 @@ open Orleans
 open Orleans.Runtime.Configuration
 open Orleans.Hosting
 open Grains.Say
+open Interfaces.Say
 
 let server () =
     task {
@@ -13,8 +14,11 @@ let server () =
 
         let builder = SiloHostBuilder()
                         .UseConfiguration(config)
-                        .ConfigureApplicationParts(fun parts -> parts.AddFromAppDomain().WithCodeGeneration() |> ignore) 
-                        // .ConfigureApplicationParts(fun parts -> parts.AddApplicationPart((typeof<HelloGrain>).Assembly).WithCodeGeneration() |> ignore)
+                        // .ConfigureApplicationParts(fun parts -> parts.AddFromApplicationBaseDirectory().WithCodeGeneration() |> ignore) 
+                        // .ConfigureApplicationParts(fun parts -> parts.AddFromAppDomain().WithCodeGeneration() |> ignore) 
+                        .ConfigureApplicationParts(fun parts -> 
+                            parts.AddApplicationPart((typeof<IHello>).Assembly)
+                                 .AddApplicationPart((typeof<HelloGrain>).Assembly).WithCodeGeneration() |> ignore)
                         .ConfigureLogging(fun logging -> logging.AddConsole() |> ignore)
         let host = builder.Build()
         return host
@@ -35,5 +39,5 @@ let main argv =
 
         Console.WriteLine("Server is stopped")
     } 
-    t.GetAwaiter().GetResult()
+    t.Wait()
     0
