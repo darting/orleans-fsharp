@@ -1,25 +1,33 @@
 ﻿open System
 open Microsoft.Extensions.Logging
+open Microsoft.Extensions.DependencyInjection
 open Orleans
 open Orleans.Runtime.Configuration
 open Orleans.Hosting
 open Giraffe.Tasks
 open Grains.Say
 open Interfaces.Say
+open Games
+
+let addGameEngines (services : IServiceCollection) =
+    services.AddSingleton<IGameEngine<Game1.GameState, Game1.GameAction>>(fun _ -> Game1.create())
+            .AddSingleton<IGameEngine<Game2.GameState, Game2.GameAction>>(fun _ -> Game2.create())
+            |> ignore
 
 let server () =
     task {
         let config = ClusterConfiguration.LocalhostPrimarySilo()
-        config.AddMemoryStorageProvider() |> ignore
+        config.AddMemoryStorageProvider("memoryStore") |> ignore
 
         let builder = SiloHostBuilder()
                         .UseConfiguration(config)
-                        // .ConfigureApplicationParts(fun parts -> parts.AddFromApplicationBaseDirectory().WithCodeGeneration() |> ignore) 
-                        // .ConfigureApplicationParts(fun parts -> parts.AddFromAppDomain().WithCodeGeneration() |> ignore) 
                         .ConfigureApplicationParts(fun parts -> 
                             parts.AddApplicationPart((typeof<IHello>).Assembly)
-                                 .AddApplicationPart((typeof<HelloGrain>).Assembly).WithCodeGeneration() |> ignore)
+                                 .AddApplicationPart((typeof<HelloGrain>).Assembly)
+                                 .AddApplicationPart((typeof<IGameEngine<_,_>>).Assembly)
+                                 .WithCodeGeneration() |> ignore)
                         .ConfigureLogging(fun logging -> logging.AddConsole() |> ignore)
+                        .ConfigureServices(addGameEngines)
         let host = builder.Build()
         return host
     }

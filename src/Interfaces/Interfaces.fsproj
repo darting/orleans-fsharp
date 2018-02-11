@@ -13,4 +13,8 @@
     <PackageReference Include="Microsoft.Orleans.OrleansCodeGenerator" Version="2.0.0-*" />
   </ItemGroup>
 
+  <ItemGroup>
+    <ProjectReference Include="..\Games\Games.fsproj" />
+  </ItemGroup>
+
 </Project>

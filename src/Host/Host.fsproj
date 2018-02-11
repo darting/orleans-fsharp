@@ -12,6 +12,7 @@
   <ItemGroup>
     <ProjectReference Include="..\Interfaces\Interfaces.fsproj" />
     <ProjectReference Include="..\Grains\Grains.fsproj" />
+    <ProjectReference Include="..\Games\Games.fsproj" />
   </ItemGroup>
   
   <ItemGroup>

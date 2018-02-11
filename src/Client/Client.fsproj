@@ -18,6 +18,7 @@
 
   <ItemGroup>
     <ProjectReference Include="..\Interfaces\Interfaces.fsproj" />
+    <ProjectReference Include="..\Games\Games.fsproj" />
   </ItemGroup>
 
 </Project>
