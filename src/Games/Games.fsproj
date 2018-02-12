@@ -6,6 +6,12 @@
 
   <ItemGroup>
     <Compile Include="Library.fs" />
+    <Compile Include="TicTacToe.fs" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <PackageReference Include="MathNet.Numerics" Version="4.0.0" />
+    <PackageReference Include="MathNet.Numerics.FSharp" Version="4.0.0" />
   </ItemGroup>
 
 </Project>
