@@ -45,14 +45,14 @@ module Game3 =
     let private calculate (wager : decimal) =
         let result = List.init 5 (fun _ -> random.Next 10)
         let win = (List.sum result) % 2 = 0
-        result, (if win then wager else -wager)
+        result, (if win then wager * 2m else 0m)
     let reducer (prevState : GameState) action = 
         match action with
         | Spin wager ->
-            let balance, wager' = match prevState with 
-                                  | GameState.Spin (b, _) -> b, wager 
-                                  | GameState.FreeSpin (b, _) -> b, 0m  
-            let result, winlose = calculate wager'
+            let balance = match prevState with 
+                          | GameState.Spin (b, _) -> b - wager
+                          | GameState.FreeSpin (b, _) -> b
+            let result, winlose = calculate wager
             let balance' = balance + winlose
             if (List.head result = 0) then 
                 GameState.FreeSpin (balance', result)
