@@ -47,11 +47,11 @@ module Startup =
 
     let noticeAllHandler next (ctx : HttpContext) = 
         task {
-            let hub = ctx.GetService<StreamingHub>()
+            let hub = ctx.GetService<IHubContext<IndexHub>>()
             do! hub.Clients.All.InvokeAsync("notice", "hi, all") 
                 |> Async.AwaitTask 
                 |> Async.StartAsTask
-            return! next ctx
+            return! text "sent" next ctx
         }
 
     let webApp = 

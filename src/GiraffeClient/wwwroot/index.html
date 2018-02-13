@@ -46,6 +46,9 @@
             connection.on('chat', function({user, message}) {
                 addLine('resultsList', user + " say: " + message);
             });
+            connection.on('notice', function(msg) {
+                addLine('resultsList', msg, "red");
+            });
         }
 
         function send() {
