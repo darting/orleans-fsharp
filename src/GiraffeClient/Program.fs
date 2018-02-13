@@ -1,11 +1,13 @@
 ﻿open System
 open Giraffe
 open System.IO
-
 open Microsoft.AspNetCore
 open Microsoft.AspNetCore.Builder
 open Microsoft.AspNetCore.Hosting
 open Microsoft.AspNetCore.Http
+open Microsoft.AspNetCore.Cors
+open Microsoft.AspNetCore.WebSockets
+open Microsoft.AspNetCore.SignalR
 open Microsoft.AspNetCore.Http.Features
 open Microsoft.AspNetCore.Authentication
 open Microsoft.AspNetCore.Authentication.Cookies
@@ -16,8 +18,10 @@ open Orleans
 open Orleans.Runtime.Configuration
 open Orleans.Hosting
 open Interfaces.Say
+open Microsoft.AspNetCore.SignalR
+open GiraffeClient.Hubs.Streaming
 
-module App = 
+module Startup = 
 
     let errorHandler (ex : Exception) (logger : ILogger) =
         logger.LogError(EventId(), ex, "An unhandled exception has occurred while executing the request.")
@@ -41,21 +45,41 @@ module App =
                 return! text response next ctx
             }
 
+    let noticeAllHandler next (ctx : HttpContext) = 
+        task {
+            let hub = ctx.GetService<StreamingHub>()
+            do! hub.Clients.All.InvokeAsync("notice", "hi, all") 
+                |> Async.AwaitTask 
+                |> Async.StartAsTask
+            return! next ctx
+        }
+
     let webApp = 
         choose [
             GET >=> route "/" >=> text "index"
             GET >=> route "/sayhello" >=> sayHelloHandler
+            route "/noticeall" >=> noticeAllHandler
         ]
 
     let configureApp (app : IApplicationBuilder) =
         app.UseGiraffeErrorHandler(errorHandler)
            .UseGiraffe webApp
+        app.UseCors(fun x -> x.AllowAnyHeader().AllowAnyMethod().AllowAnyOrigin() |> ignore) |> ignore
+        app.UseStaticFiles()  
+           .UseSignalR(fun routes -> 
+                routes.MapHub<StreamingHub>("streaming") |> ignore
+            )
+            .UseStaticFiles() |> ignore
+
 
     let configureServices (services : IServiceCollection) =
         let clusterClient = buildClusterClient ()
         clusterClient.Connect().Wait()
         services.AddSingleton<IClusterClient>(clusterClient)
                 .AddDataProtection() |> ignore     
+
+        services.AddSignalR () |> ignore      
+        services.AddCors() |> ignore
 
     let configureLogging (loggerBuilder : ILoggingBuilder) =
         loggerBuilder.AddFilter(fun lvl -> lvl.Equals LogLevel.Error)
@@ -68,9 +92,9 @@ let main argv =
     printfn "Hello World from F#!"
 
     WebHost.CreateDefaultBuilder()
-           .Configure(Action<IApplicationBuilder> App.configureApp)
-           .ConfigureServices(App.configureServices)
-           .ConfigureLogging(App.configureLogging)
+           .Configure(Action<IApplicationBuilder> Startup.configureApp)
+           .ConfigureServices(Startup.configureServices)
+           .ConfigureLogging(Startup.configureLogging)
            .Build()
            .Run()
 
