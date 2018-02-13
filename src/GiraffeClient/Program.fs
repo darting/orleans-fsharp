@@ -19,7 +19,7 @@ open Orleans.Runtime.Configuration
 open Orleans.Hosting
 open Interfaces.Say
 open Microsoft.AspNetCore.SignalR
-open GiraffeClient.Hubs.Streaming
+open GiraffeClient.Hubs
 
 module Startup = 
 
@@ -67,6 +67,7 @@ module Startup =
         app.UseCors(fun x -> x.AllowAnyHeader().AllowAnyMethod().AllowAnyOrigin() |> ignore) |> ignore
         app.UseStaticFiles()  
            .UseSignalR(fun routes -> 
+                routes.MapHub<IndexHub>("index") |> ignore
                 routes.MapHub<StreamingHub>("streaming") |> ignore
             )
             .UseStaticFiles() |> ignore

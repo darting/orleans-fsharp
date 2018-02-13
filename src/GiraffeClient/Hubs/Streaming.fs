@@ -1,4 +1,4 @@
-module GiraffeClient.Hubs.Streaming
+namespace GiraffeClient.Hubs
 
 open System
 open Microsoft.AspNetCore.SignalR

@@ -25,3 +25,7 @@ function addLine(listId, line, color) {
     child.innerText = line;
     document.getElementById(listId).appendChild(child);
 }
+
+function ready(callback) {
+    document.addEventListener('DOMContentLoaded', callback);
+}

@@ -1,0 +1,75 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8" />
+    <title></title>
+</head>
+<body>
+
+    <button id="connectButton" type="button">connect</button>
+    <textarea id="chatInput" cols="50" rows="5"></textarea>
+    <button id="sendButton" type="button">send</button>
+    <ul id="resultsList"></ul>
+
+    <script src="js/signalr-client-1.0.0-alpha2-final.min.js"></script>
+    <script src="js/utils.js"></script>
+    <script>
+        let logger = new signalR.ConsoleLogger(signalR.LogLevel.Trace);
+        let transportType = signalR.TransportType.WebSockets;
+        let isConnected = false;
+        let connection;
+
+        ready(setup);
+
+        function setup() {
+            click('connectButton', connect);
+            click('sendButton', send);
+        }
+
+        function connect() {
+            connection = new signalR.HubConnection('/index', { transport: transportType, logger: logger });
+            connection.onclose(function () {
+                connectButton.disabled = false;
+                sendButton.disabled = true;
+                addLine('resultsList', 'disconnected', 'green');
+            });
+            connection.start()
+                .then(function () {
+                    isConnected = true;
+                    connectButton.disabled = true;
+                    sendButton.disabled = false;
+                    addLine('resultsList', 'connected', 'green');
+                });
+            connection.on('newConnection', function(id) {
+                addLine('resultsList', 'new connection ' + id, 'red');
+            });
+            connection.on('chat', function({user, message}) {
+                addLine('resultsList', user + " say: " + message);
+            });
+        }
+
+        function send() {
+            invoke(connection, "chat", chatInput.value);
+        }
+        
+        function invoke(connection, method) {
+            if (!isConnected) {
+                return;
+            }
+            var argsArray = Array.prototype.slice.call(arguments);
+            connection.invoke.apply(connection, argsArray.slice(1))
+                .then(function (result) {
+                    console.log("invocation completed successfully: " + (result === null ? '(null)' : result));
+                    if (result) {
+                        addLine('resultsList', result);
+                    }
+                })
+                .catch(function (err) {
+                    addLine('resultsList', err, 'red');
+                });
+        }
+
+    </script>
+</body>
+
+</html>
