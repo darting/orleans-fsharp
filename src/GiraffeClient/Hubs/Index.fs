@@ -7,7 +7,6 @@ open FSharp.Control.Tasks.ContextInsensitive
 open System.Threading.Tasks
 
 
-[<CLIMutable>]
 type Chat = {
     User : string
     Message : string
