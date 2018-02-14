@@ -51,3 +51,12 @@ module Say =
                 engine.Zero () |> Task.FromResult
             member __.Play prevState action = 
                 engine.Reducer prevState action |> Task.FromResult       
+
+    type AdventureGameGrain (engine : IGameEngine<Games.Adventure.WorldStore.State, Games.Adventure.WorldStore.Action>) = 
+        inherit Grain ()
+        interface IGame<Games.Adventure.WorldStore.State, Games.Adventure.WorldStore.Action> with
+            member __.GetState () =
+                engine.Zero () |> Task.FromResult
+            member __.Play prevState action = 
+                engine.Reducer prevState action |> Task.FromResult
+                

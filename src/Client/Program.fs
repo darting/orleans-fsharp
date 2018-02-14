@@ -64,6 +64,25 @@ let worker3 (client : IClusterClient) =
         printState state
     }
 
+let worker4 (client : IClusterClient) = 
+    let printPlayerState state = 
+        printfn "player: %s" (match state with | Games.Adventure.PlayerStore.Alive x -> x.Name | _ -> "die")
+
+    task {
+        let game = client.GetGrain<IGame<Games.Adventure.WorldStore.State, Games.Adventure.WorldStore.Action>> "adventure::darting"
+        let! ((playerState, roomState) as state) = game.GetState ()
+        printPlayerState playerState
+
+        let! state = game.Play state (Games.Adventure.WorldStore.Action.Rename "darting")
+        printPlayerState playerState
+        // let! state = game.Play state Game2.GameAction.Rev
+        // printfn "1) play: %s" state
+        // let! state = game.Play state Game2.GameAction.Rev
+        // printfn "2) play: %s" state
+        // let! state = game.Play state Game2.GameAction.Rev
+        // printfn "3) play: %s" state
+    }
+
 let creator () =
     task {
         let t = typeof<IHello>
@@ -91,6 +110,7 @@ let main argv =
         do! worker1 client
         do! worker2 client
         do! worker3 client
+        do! worker4 client
         Console.ReadLine () |> ignore
     }
     t.Wait()

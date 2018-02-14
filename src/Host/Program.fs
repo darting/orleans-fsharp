@@ -12,6 +12,7 @@ open Games
 let addGameEngines (services : IServiceCollection) =
     services.AddSingleton<IGameEngine<Game1.GameState, Game1.GameAction>>(fun _ -> Game1.create())
             .AddSingleton<IGameEngine<Game2.GameState, Game2.GameAction>>(fun _ -> Game2.create())
+            .AddSingleton<IGameEngine<Games.Adventure.WorldStore.State, Games.Adventure.WorldStore.Action>>(fun _ -> Games.Adventure.WorldStore.create())
             |> ignore
 
 let server () =
