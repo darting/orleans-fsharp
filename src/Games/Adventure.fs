@@ -1,7 +1,5 @@
 namespace Games
 
-open System
-
 module Adventure = 
 
     type Direction =
@@ -9,30 +7,35 @@ module Adventure =
         | South
         | East 
         | West
+        | Down
+        | Up
     type Creation = 
-        | Player of PlayerInfo
+        | Player of UserInfo
         | Monster of MonsterInfo
-    and PlayerInfo = {
-        ID : Guid
+    and UserInfo = {
+        ID : int
         Name : string
     }
     and MonsterInfo = {
-        ID : Guid
+        ID : int
         Name : string
     }
+    and RoomID = int
     and RoomInfo = {
+        ID : RoomID
         Name : string
         Description : string
+        Directions : (Direction * RoomID) list
     }
 
     module PlayerStore = 
         type State = 
-            | Alive of PlayerInfo
-            | Die of PlayerInfo
+            | Alive of UserInfo
+            | Die of UserInfo
         and Action = 
             | Rename of string
 
-        let zero () = Alive { ID = Guid.NewGuid (); Name = "" }
+        let zero () = Alive { ID = 0; Name = "" }
 
         let reducer prevState action = 
             match prevState with
@@ -51,13 +54,13 @@ module Adventure =
             | Join of Creation
             | Leave of Creation
             | Go of Direction
-        let zero () : State = { Name = ""; Description = "" }, []
+        let zero () : State = { ID = 0; Name = ""; Description = ""; Directions = [] }, []
         let reducer (room, creations) action = 
             match action with
             | SetInfo info -> info, creations
             | Join creation -> room, creation :: creations
             | Leave creation -> room, List.except [ creation ] creations
-            | Go direction -> { Name = direction.ToString (); Description = direction.ToString () }, []
+            | Go direction -> { ID = 0; Name = direction.ToString (); Description = direction.ToString (); Directions = [] }, []
 
         let go prevState direction = reducer prevState (Go direction)
         let setInfo prevState info = reducer prevState (SetInfo info)
@@ -86,4 +89,3 @@ module Adventure =
             { new IGameEngine<State, Action> with
                 member __.Zero = zero
                 member __.Reducer = reducer }
-                
