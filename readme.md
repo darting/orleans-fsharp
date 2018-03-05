@@ -4,7 +4,9 @@
 ```sh
 > cd src/Host
 > dotnet run
-> cd ../Client
+```
+```sh
+> cd src/Client
 > dotnet run
 ```
 
