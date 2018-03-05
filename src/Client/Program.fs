@@ -2,10 +2,13 @@ open System
 open Microsoft.Extensions.Logging
 open Giraffe.Tasks
 open Orleans
-open Orleans.Runtime.Configuration
+open Orleans.Configuration
 open Orleans.Hosting
+open Orleans.Runtime
+open Orleans.Runtime.Configuration
 open Interfaces.Say
 open Games
+open System.Net
 
 let worker (client : IClusterClient) = 
     task {
@@ -84,12 +87,17 @@ let worker4 (client : IClusterClient) =
 let creator () =
     task {
         let t = typeof<IHello>
-        let config = ClientConfiguration.LocalhostSilo()
+        let port = 30000
+        let siloAddr = IPAddress.Loopback
+        let endpoint = IPEndPoint(siloAddr, port)
         let client = ClientBuilder()
-                        .UseConfiguration(config)
+                        .ConfigureCluster(fun (x : ClusterOptions) -> 
+                            x.ClusterId <- "orleans-fsharp")
+                        .UseStaticClustering(fun (x : StaticGatewayListProviderOptions) -> 
+                            x.Gateways.Add(endpoint.ToGatewayUri()))
                         .ConfigureApplicationParts(fun parts -> 
                             parts.AddApplicationPart((typeof<IHello>).Assembly)
-                                 .WithCodeGeneration() |> ignore )
+                                 .WithCodeGeneration() |> ignore)
                         .ConfigureLogging(fun logging -> logging.AddConsole() |> ignore)
                         .Build()
         return client

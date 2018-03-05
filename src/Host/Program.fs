@@ -2,12 +2,13 @@
 open Microsoft.Extensions.Logging
 open Microsoft.Extensions.DependencyInjection
 open Orleans
-open Orleans.Runtime.Configuration
+open Orleans.Configuration
 open Orleans.Hosting
 open Giraffe.Tasks
 open Grains.Say
 open Interfaces.Say
 open Games
+open System.Net
 
 let addGameEngines (services : IServiceCollection) =
     services.AddSingleton<IGameEngine<Game1.GameState, Game1.GameAction>>(fun _ -> Game1.create())
@@ -17,11 +18,15 @@ let addGameEngines (services : IServiceCollection) =
 
 let server () =
     task {
-        let config = ClusterConfiguration.LocalhostPrimarySilo()
-        config.AddMemoryStorageProvider("memoryStore") |> ignore
-
+        let siloPort = 11111
+        let gatewayPort = 30000
+        let siloAddr = IPAddress.Loopback
         let builder = SiloHostBuilder()
-                        .UseConfiguration(config)
+                        .Configure(fun (x : ClusterOptions) -> 
+                            x.ClusterId <- "orleans-fsharp")
+                        .UseDevelopmentClustering(fun (x : DevelopmentMembershipOptions) -> 
+                            x.PrimarySiloEndpoint <- IPEndPoint(siloAddr, siloPort))
+                        .ConfigureEndpoints(siloAddr, siloPort, gatewayPort)
                         .ConfigureApplicationParts(fun parts -> 
                             parts.AddApplicationPart((typeof<IHello>).Assembly)
                                  .AddApplicationPart((typeof<HelloGrain>).Assembly)
