@@ -17,46 +17,46 @@ module Say =
                 a + " - " + b |> Task.FromResult
 
     // Not working
-     //type GameGrain<'GameState, 'GameAction> (engine: IGameEngine<'GameState, 'GameAction>) = 
-     //    inherit Grain ()
-     //    interface IGame<'GameState, 'GameAction> with
-     //        member __.GetState () =
-     //            engine.Zero () |> Task.FromResult
-
-     //        member __.Play prevState action = 
-     //            engine.Reducer prevState action |> Task.FromResult
-
-
-    type Game1Grain (engine : IGameEngine<Games.Game1.GameState, Games.Game1.GameAction>) = 
+     type GameGrain<'GameState, 'GameAction> (engine: IGameEngine<'GameState, 'GameAction>) = 
         inherit Grain ()
-        interface IGame<Game1.GameState, Games.Game1.GameAction> with
+        interface IGame<'GameState, 'GameAction> with
             member __.GetState () =
                 engine.Zero () |> Task.FromResult
+
             member __.Play prevState action = 
                 engine.Reducer prevState action |> Task.FromResult
 
-    type Game2Grain (engine : IGameEngine<Games.Game2.GameState, Games.Game2.GameAction>) = 
-        inherit Grain ()
-        interface IGame<Game2.GameState, Games.Game2.GameAction> with
-            member __.GetState () =
-                engine.Zero () |> Task.FromResult
-            member __.Play prevState action = 
-                engine.Reducer prevState action |> Task.FromResult
 
-    type Game3Grain () = 
-        inherit Grain ()
-        let engine = Games.Game3.create ()
-        interface IGame<Game3.GameState, Games.Game3.GameAction> with
-            member __.GetState () =
-                engine.Zero () |> Task.FromResult
-            member __.Play prevState action = 
-                engine.Reducer prevState action |> Task.FromResult       
+    // type Game1Grain (engine : IGameEngine<Games.Game1.GameState, Games.Game1.GameAction>) = 
+    //     inherit Grain ()
+    //     interface IGame<Game1.GameState, Games.Game1.GameAction> with
+    //         member __.GetState () =
+    //             engine.Zero () |> Task.FromResult
+    //         member __.Play prevState action = 
+    //             engine.Reducer prevState action |> Task.FromResult
 
-    type AdventureGameGrain (engine : IGameEngine<Games.Adventure.WorldStore.State, Games.Adventure.WorldStore.Action>) = 
-        inherit Grain ()
-        interface IGame<Games.Adventure.WorldStore.State, Games.Adventure.WorldStore.Action> with
-            member __.GetState () =
-                engine.Zero () |> Task.FromResult
-            member __.Play prevState action = 
-                engine.Reducer prevState action |> Task.FromResult
+    // type Game2Grain (engine : IGameEngine<Games.Game2.GameState, Games.Game2.GameAction>) = 
+    //     inherit Grain ()
+    //     interface IGame<Game2.GameState, Games.Game2.GameAction> with
+    //         member __.GetState () =
+    //             engine.Zero () |> Task.FromResult
+    //         member __.Play prevState action = 
+    //             engine.Reducer prevState action |> Task.FromResult
+
+    // type Game3Grain () = 
+    //     inherit Grain ()
+    //     let engine = Games.Game3.create ()
+    //     interface IGame<Game3.GameState, Games.Game3.GameAction> with
+    //         member __.GetState () =
+    //             engine.Zero () |> Task.FromResult
+    //         member __.Play prevState action = 
+    //             engine.Reducer prevState action |> Task.FromResult       
+
+    // type AdventureGameGrain (engine : IGameEngine<Games.Adventure.WorldStore.State, Games.Adventure.WorldStore.Action>) = 
+    //     inherit Grain ()
+    //     interface IGame<Games.Adventure.WorldStore.State, Games.Adventure.WorldStore.Action> with
+    //         member __.GetState () =
+    //             engine.Zero () |> Task.FromResult
+    //         member __.Play prevState action = 
+    //             engine.Reducer prevState action |> Task.FromResult
                 
