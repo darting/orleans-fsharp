@@ -86,7 +86,6 @@ let worker4 (client : IClusterClient) =
 
 let creator () =
     task {
-        let t = typeof<IHello>
         let port = 30000
         let siloAddr = IPAddress.Loopback
         let endpoint = IPEndPoint(siloAddr, port)
@@ -114,11 +113,11 @@ let main argv =
         do! client.Connect ()
         Console.WriteLine("Client successfully connect to silo host")
         Console.ReadLine () |> ignore
-        do! worker client
+        //do! worker client
         do! worker1 client
         do! worker2 client
         do! worker3 client
-        // do! worker4 client
+        do! worker4 client
         Console.ReadLine () |> ignore
     }
     t.Wait()
