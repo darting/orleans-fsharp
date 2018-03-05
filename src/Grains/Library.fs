@@ -17,14 +17,14 @@ module Say =
                 a + " - " + b |> Task.FromResult
 
     // Not working
-     //type GameGrain<'GameState, 'GameAction> (engine: IGameEngine<'GameState, 'GameAction>) = 
-     //    inherit Grain ()
-     //    interface IGame<'GameState, 'GameAction> with
-     //        member __.GetState () =
-     //            engine.Zero () |> Task.FromResult
+    //  type GameGrain<'GameState, 'GameAction> (engine: IGameEngine<'GameState, 'GameAction>) = 
+    //     inherit Grain ()
+    //     interface IGame<'GameState, 'GameAction> with
+    //         member __.GetState () =
+    //             engine.Zero () |> Task.FromResult
 
-     //        member __.Play prevState action = 
-     //            engine.Reducer prevState action |> Task.FromResult
+    //         member __.Play prevState action = 
+    //             engine.Reducer prevState action |> Task.FromResult
 
 
     type Game1Grain (engine : IGameEngine<Games.Game1.GameState, Games.Game1.GameAction>) = 

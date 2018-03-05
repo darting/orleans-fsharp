@@ -96,6 +96,7 @@ let creator () =
                             x.Gateways.Add(endpoint.ToGatewayUri()))
                         .ConfigureApplicationParts(fun parts -> 
                             parts.AddApplicationPart((typeof<IHello>).Assembly)
+                                 .AddApplicationPart((typeof<IGameEngine<_,_>>).Assembly)
                                  .WithCodeGeneration() |> ignore)
                         .ConfigureLogging(fun logging -> logging.AddConsole() |> ignore)
                         .Build()
@@ -116,7 +117,7 @@ let main argv =
         do! worker1 client
         do! worker2 client
         do! worker3 client
-        do! worker4 client
+        // do! worker4 client
         Console.ReadLine () |> ignore
     }
     t.Wait()
