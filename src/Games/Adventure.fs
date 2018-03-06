@@ -68,7 +68,7 @@ module Adventure =
         let leave prevState creation = reducer prevState (Leave creation)
 
     module WorldStore = 
-        type State = PlayerStore.State * RoomStore.State
+        type State = State of PlayerStore.State * RoomStore.State
         and Action = 
             | Rename of string
             | Go of Direction
@@ -76,14 +76,15 @@ module Adventure =
             | Join of Creation
             | Leave of Creation
 
-        let zero () : State = PlayerStore.zero (), RoomStore.zero ()
-        let reducer (playerState, roomState) action = 
+        let zero () : State = State (PlayerStore.zero (), RoomStore.zero ())
+        let reducer (State (playerState, roomState)) action = 
             match action with
             | Rename x -> PlayerStore.rename playerState x, roomState
             | Go direction -> playerState, RoomStore.go roomState direction
             | SetRoomInfo info -> playerState, RoomStore.setInfo roomState info
             | Join creation -> playerState, RoomStore.join roomState creation
             | Leave creation -> playerState, RoomStore.leave roomState creation
+            |> State
 
         let create () =
             { new IGameEngine<State, Action> with

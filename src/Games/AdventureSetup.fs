@@ -46,6 +46,6 @@ module AdventureSetup =
 
     let load () : WorldStore.State = 
         let room : RoomStore.State = List.head rooms, List.map Creation.Monster monsters
-        PlayerStore.zero(), room
+        WorldStore.State (PlayerStore.zero(), room)
 
 

@@ -73,15 +73,16 @@ let worker3 (client : IClusterClient) =
 // cannot be resolved.) ---> System.TypeAccessException: Named type "Games.Games.Games.Adventure.PlayerStore.State" is invalid: 
 // Type string "Games.Games.Games.Adventure.PlayerStore.State" cannot be resolved.
 let worker4 (client : IClusterClient) = 
-    let show state = 
-        printfn "player: %s" (match state with | Games.Adventure.PlayerStore.Alive x -> x.Name | _ -> "die")
+    let show (state : Games.Adventure.WorldStore.State) = 
+        let (Games.Adventure.WorldStore.State (ps, rs)) = state
+        printfn "player: %s" (match ps with | Games.Adventure.PlayerStore.Alive x -> x.Name | _ -> "die")
     let initState = AdventureSetup.load ()
     task {
         let game = client.GetGrain<IGame<Games.Adventure.WorldStore.State, Games.Adventure.WorldStore.Action>> "adventure::darting"
         // let! ((playerState, roomState) as state) = game.GetState ()
         // show playerState
-        let! ((playerState, roomState) as state) = game.Play initState (Games.Adventure.WorldStore.Action.Rename "darting")
-        show playerState
+        let! state = game.Play initState (Games.Adventure.WorldStore.Action.Rename "darting")
+        show state
     }
 
 let creator () =
