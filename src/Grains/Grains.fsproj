@@ -5,7 +5,7 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <Compile Include="Grans.fs" />
+    <Compile Include="Grains.fs" />
   </ItemGroup>
 
   <ItemGroup>

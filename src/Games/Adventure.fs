@@ -23,11 +23,10 @@ module Adventure =
         let reducer room action = room
 
     module WorldStore = 
-        [<AutoSerializable(true)>]
-        type State = string
-        and [<AutoSerializable(true)>] Action = string
+        type State = State of PlayerStore.State * RoomStore.State
+        and Action = string
 
-        let zero () : State = ""
+        let zero () : State = State (PlayerStore.zero(), RoomStore.zero())
         let reducer prevState action = prevState
 
         let create () =

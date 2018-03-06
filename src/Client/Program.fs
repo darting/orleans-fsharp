@@ -11,31 +11,36 @@ open Games
 open System.Net
 
 
-let worker4 (client : IClusterClient) = 
+let worker1 (client : IClusterClient) = 
     task {
-        let game = client.GetGrain<IGame<TestGame.State, TestGame.Action>> "adventure::darting"
+        let game = client.GetGrain<IGame<TestGame.State, TestGame.Action>> "id"
         let! x = game.Play (TestGame.zero()) (TestGame.Action.Spin 1m)
         printfn "%A" x
     }
 
-let creator () =
+let worker2 (client : IClusterClient) = 
     task {
-        let port = 30000
-        let siloAddr = IPAddress.Loopback
-        let endpoint = IPEndPoint(siloAddr, port)
-        let client = ClientBuilder()
-                        .ConfigureCluster(fun (x : ClusterOptions) -> 
-                            x.ClusterId <- "orleans-fsharp")
-                        .UseStaticClustering(fun (x : StaticGatewayListProviderOptions) -> 
-                            x.Gateways.Add(endpoint.ToGatewayUri()))
-                        .ConfigureApplicationParts(fun parts -> 
-                            parts.AddApplicationPart((typeof<IGame<_,_>>).Assembly)
-                                 .AddApplicationPart((typeof<IGameEngine<_,_>>).Assembly)
-                                 .WithCodeGeneration() |> ignore)
-                        .ConfigureLogging(fun logging -> logging.AddConsole() |> ignore)
-                        .Build()
-        return client
-    }
+        let game = client.GetGrain<IGame<Adventure.WorldStore.State, Adventure.WorldStore.Action>> "id"
+        let! x = game.Play (Adventure.WorldStore.zero()) "act"
+        printfn "%A" x
+    }    
+
+let creator () =
+    let port = 30000
+    let siloAddr = IPAddress.Loopback
+    let endpoint = IPEndPoint(siloAddr, port)
+    let client = ClientBuilder()
+                    .ConfigureCluster(fun (x : ClusterOptions) -> 
+                        x.ClusterId <- "orleans-fsharp")
+                    .UseStaticClustering(fun (x : StaticGatewayListProviderOptions) -> 
+                        x.Gateways.Add(endpoint.ToGatewayUri()))
+                    .ConfigureApplicationParts(fun parts -> 
+                        parts.AddApplicationPart((typeof<IGame<_,_>>).Assembly)
+                             .AddApplicationPart((typeof<IGameEngine<_,_>>).Assembly)
+                             .WithCodeGeneration() |> ignore)
+                    .ConfigureLogging(fun logging -> logging.AddConsole() |> ignore)
+                    .Build()
+    client
 
 
 [<EntryPoint>]
@@ -44,10 +49,10 @@ let main argv =
     printfn "Hello World from F#!"
 
     let t = task {
-        use! client = creator ()
+        use client = creator ()
         do! client.Connect ()
         Console.WriteLine("Client successfully connect to silo host")
-        do! worker4 client
+        do! worker2 client
         Console.ReadLine () |> ignore
     }
     t.Wait()

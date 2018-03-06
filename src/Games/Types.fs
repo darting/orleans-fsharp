@@ -36,6 +36,7 @@ module TestGame =
                 State.Spin (balance', result)
         
     let zero () : State = State.Spin (1000m, [])
+
     let create () =
         { new IGameEngine<State, Action> with
             member __.Zero = zero
