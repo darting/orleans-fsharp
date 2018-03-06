@@ -5,16 +5,13 @@ open Orleans
 open Orleans.Configuration
 open Orleans.Hosting
 open Giraffe.Tasks
-open Grains.Say
-open Interfaces.Say
+open Grains
+open Interfaces
 open Games
 open System.Net
 
 let addGameEngines (services : IServiceCollection) =
-    services.AddSingleton<IGameEngine<Game1.GameState, Game1.GameAction>>(fun _ -> Game1.create())
-            .AddSingleton<IGameEngine<Game2.GameState, Game2.GameAction>>(fun _ -> Game2.create())
-            .AddSingleton<IGameEngine<Game3.GameState, Game3.GameAction>>(fun _ -> Game3.create())
-            .AddSingleton<IGameEngine<Games.Adventure.WorldStore.State, Games.Adventure.WorldStore.Action>>(fun _ -> Games.Adventure.WorldStore.create())
+    services.AddSingleton<IGameEngine<TestGame.State, TestGame.Action>>(fun _ -> TestGame.create())
             |> ignore
 
 let server () =
@@ -29,8 +26,8 @@ let server () =
                             x.PrimarySiloEndpoint <- IPEndPoint(siloAddr, siloPort))
                         .ConfigureEndpoints(siloAddr, siloPort, gatewayPort)
                         .ConfigureApplicationParts(fun parts -> 
-                            parts.AddApplicationPart((typeof<IHello>).Assembly)
-                                 .AddApplicationPart((typeof<HelloGrain>).Assembly)
+                            parts.AddApplicationPart((typeof<IGame<_,_>>).Assembly)
+                                 .AddApplicationPart((typeof<GameGrain<_,_>>).Assembly)
                                  .AddApplicationPart((typeof<IGameEngine<_,_>>).Assembly)
                                  .WithCodeGeneration() |> ignore)
                         .ConfigureLogging(fun logging -> logging.AddConsole() |> ignore)
