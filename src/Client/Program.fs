@@ -52,6 +52,7 @@ let main argv =
         use client = creator ()
         do! client.Connect ()
         Console.WriteLine("Client successfully connect to silo host")
+        do! worker1 client
         do! worker2 client
         Console.ReadLine () |> ignore
     }

@@ -1,4 +1,4 @@
-module Grains
+namespace Grains
 
 open Orleans
 open Interfaces
