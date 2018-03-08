@@ -5,8 +5,8 @@ open Orleans
 open Orleans.Configuration
 open Orleans.Hosting
 open Giraffe.Tasks
-open Grains.Say
-open Interfaces.Say
+open Grains
+open Interfaces
 open Games
 open System.Net
 

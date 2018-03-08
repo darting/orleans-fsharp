@@ -6,7 +6,7 @@ open Orleans.Configuration
 open Orleans.Hosting
 open Orleans.Runtime
 open Orleans.Runtime.Configuration
-open Interfaces.Say
+open Interfaces
 open Games
 open System.Net
 

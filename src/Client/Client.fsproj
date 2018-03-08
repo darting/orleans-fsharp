@@ -13,7 +13,7 @@
     <PackageReference Include="Microsoft.Extensions.Logging.Console" Version="2.0.0" />
     <PackageReference Include="Microsoft.Orleans.Core" Version="2.0.0-*" />
     <PackageReference Include="Microsoft.Orleans.OrleansCodeGenerator" Version="2.0.0-*" PrivateAssets="All" />
-    <PackageReference Include="Giraffe.Tasks" Version="0.1.0-beta-010" />
+    <PackageReference Include="TaskBuilder.fs" Version="1.2.0-rc" />
   </ItemGroup>
 
   <ItemGroup>
