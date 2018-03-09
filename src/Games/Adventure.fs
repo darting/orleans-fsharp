@@ -86,6 +86,14 @@ module Adventure =
             | Leave creation -> playerState, RoomStore.leave roomState creation
 
         let create () =
-            { new IGameEngine<State, Action> with
-                member __.Zero = zero
-                member __.Reducer = reducer }
+            { 
+                new IGameStore<State, Action> with
+                    member __.GetState () = 
+                        taskResult {
+                            return zero ()
+                        }
+                    member __.Reducer prevState action = 
+                        taskResult {
+                            return reducer prevState action                            
+                        } 
+            }
