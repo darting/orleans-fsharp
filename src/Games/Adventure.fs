@@ -88,6 +88,10 @@ module Adventure =
         let create () =
             { 
                 new IGameStore<State, Action> with
+                    member __.GetInitialState () = 
+                        taskResult {
+                            return zero ()
+                        }
                     member __.GetState () = 
                         taskResult {
                             return zero ()
@@ -96,4 +100,8 @@ module Adventure =
                         taskResult {
                             return reducer prevState action                            
                         } 
+                    // member __.SetState state = 
+                    //     taskResult {
+                    //         return ()
+                    //     }
             }
