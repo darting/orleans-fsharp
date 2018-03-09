@@ -10,5 +10,9 @@
     <Compile Include="Adventure.fs" />
     <Compile Include="AdventureSetup.fs" />
   </ItemGroup>
+  
+  <ItemGroup>
+    <ProjectReference Include="..\Core\Core.fsproj" />
+  </ItemGroup>
 
 </Project>
