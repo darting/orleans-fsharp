@@ -34,7 +34,7 @@ module Program =
                         .UseStaticClustering(fun (x : StaticGatewayListProviderOptions) -> 
                             x.Gateways.Add(endpoint.ToGatewayUri()))
                         .ConfigureApplicationParts(fun parts -> 
-                            parts.AddApplicationPart((typeof<IGameGrain<_,_>>).Assembly)
+                            parts.AddApplicationPart((typeof<IActor<_,_>>).Assembly)
                                  .WithCodeGeneration() |> ignore)
                         .ConfigureLogging(fun logging -> logging.AddConsole() |> ignore)
                         .Build()
@@ -44,14 +44,10 @@ module Program =
         logger.LogError(EventId(), ex, "An unhandled exception has occurred while executing the request.")
         clearResponse >=> setStatusCode 500 >=> text ex.Message
 
-    let webApp = 
-        choose [
-            GET >=> route "/" >=> text "index"
-        ]
 
     let configureApp (app: IApplicationBuilder) =
         app.UseGiraffeErrorHandler(errorHandler)
-           .UseGiraffe webApp
+           .UseGiraffe Web.App.root
         app.UseCors(fun x -> x.AllowAnyHeader().AllowAnyMethod().AllowAnyOrigin() |> ignore) |> ignore
         app.UseStaticFiles()  
         //    .UseSignalR(fun routes -> 
@@ -59,7 +55,7 @@ module Program =
         //         routes.MapHub<StreamingHub>("streaming") |> ignore
         //     )
            .UseStaticFiles() |> ignore
-
+        
     let configureLogging (loggerBuilder : ILoggingBuilder) =
         loggerBuilder.AddFilter(fun lvl -> lvl >= LogLevel.Warning)
                      .AddConsole()
@@ -75,11 +71,11 @@ module Program =
         WebHost.CreateDefaultBuilder(args)
            .Configure(Action<IApplicationBuilder> configureApp)
            .ConfigureServices(fun services -> 
-                services.AddSingleton<IClusterClient>(clusterClient)
-                        .AddDataProtection() |> ignore     
-
-                services.AddSignalR () |> ignore      
-                services.AddCors() |> ignore 
+                services.AddSingleton<IClusterClient>(clusterClient) |> ignore
+                services.AddDataProtection() |> ignore
+                services.AddSignalR () |> ignore
+                services.AddCors() |> ignore
+                services.AddGiraffe() |> ignore
            )
            .ConfigureLogging(configureLogging)
            .Build()

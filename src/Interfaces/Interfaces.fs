@@ -1,9 +1,9 @@
 namespace Interfaces
 
 
-type IGameGrain<'GameState, 'GameAction> = 
+type IActor<'State, 'Action> = 
     inherit Orleans.IGrainWithStringKey
-    abstract member GetState : unit -> TaskResult<'GameState, StatusCode>
-    abstract member Dispatch : 'GameAction -> TaskResult<'GameState, StatusCode>
+    abstract member GetState : unit -> TaskResult<'State, StatusCode>
+    abstract member Dispatch : 'Action -> TaskResult<'State, StatusCode>
 
 

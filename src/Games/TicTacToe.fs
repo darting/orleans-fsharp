@@ -44,8 +44,3 @@ module TicTacToe =
                     EndGame = isVictory newBoard }
             else 
                 state
-
-    let create () =
-        { new IGameEngine<State, Action> with
-            member __.Zero = zero
-            member __.Reducer = reducer }

@@ -11,7 +11,8 @@ open Games
 open System.Net
 
 let addGameStores (services : IServiceCollection) =
-    services.AddSingleton<IGameEngine<Games.Adventure.WorldStore.State, Games.Adventure.WorldStore.Action>>(fun _ -> Games.Adventure.WorldStore.create())
+    services.AddSingleton(Adventure.WorldStore.createReducer())
+            .AddSingleton(Adventure.WorldStore.createStore())
             |> ignore
 
 let server () =
@@ -25,8 +26,8 @@ let server () =
                         x.PrimarySiloEndpoint <- IPEndPoint(siloAddr, siloPort))
                     .ConfigureEndpoints(siloAddr, siloPort, gatewayPort)
                     .ConfigureApplicationParts(fun parts -> 
-                        parts.AddApplicationPart((typeof<IGameGrain<_,_>>).Assembly)
-                             .AddApplicationPart((typeof<GameGrain<_,_>>).Assembly)
+                        parts.AddApplicationPart((typeof<IActor<_,_>>).Assembly)
+                             .AddApplicationPart((typeof<Actor<_,_>>).Assembly)
                              .WithCodeGeneration() |> ignore)
                     .ConfigureLogging(fun logging -> logging.AddConsole() |> ignore)
                     .ConfigureServices(addGameStores)

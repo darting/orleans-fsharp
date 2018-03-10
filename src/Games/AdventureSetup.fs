@@ -1,6 +1,6 @@
 namespace Games
 
-open Adventure
+open Games.Adventure
 
 module AdventureSetup = 
 
@@ -44,8 +44,8 @@ module AdventureSetup =
               Directions = [ ] }
         ]
 
-    let load () : WorldStore.State = 
-        let room : RoomStore.State = List.head rooms, List.map Creation.Monster monsters
-        PlayerStore.zero(), room
+    // let load () : WorldStore.State = 
+    //     let room : RoomStore.State = List.head rooms, List.map Creation.Monster monsters
+    //     WorldStore.State (PlayerStore.zero(), room)
 
 

@@ -23,3 +23,10 @@ type StatusCode =
         | ServiceUnavailable -> 503
         | Unknown -> 520
 
+
+type IReducer<'State, 'Action> = 'State -> 'Action -> TaskResult<'State, StatusCode>
+
+type IStore<'State> = 
+    abstract GetInitialState : unit -> TaskResult<'State, StatusCode>
+    abstract GetState : unit -> TaskResult<'State, StatusCode>
+    abstract SetState : 'State -> TaskResult<unit, StatusCode>
