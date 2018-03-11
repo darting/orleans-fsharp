@@ -1,0 +1,21 @@
+{
+  "name": "yet-another-game",
+  "dependencies": {
+    "@aspnet/signalr": "^1.0.0-preview1-update1",
+    "@types/react": "^16.0.40",
+    "@types/react-dom": "^16.0.4",
+    "@types/react-redux": "^5.0.15",
+    "office-ui-fabric-react": "^5.62.1",
+    "react": "^16.2.0",
+    "react-dom": "^16.2.0",
+    "react-redux": "^5.0.7",
+    "redux": "^3.7.2",
+    "ts-loader": "^4.0.1",
+    "typescript": "^2.7.2",
+    "webpack": "^4.1.1",
+    "webpack-cli": "^2.0.11"
+  },
+  "scripts": {
+    "start": "webpack --config webpack.config.js --watch"
+  }
+}

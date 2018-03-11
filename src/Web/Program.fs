@@ -52,7 +52,7 @@ module Program =
         app.UseCors(fun x -> x.AllowAnyHeader().AllowAnyMethod().AllowAnyOrigin() |> ignore) |> ignore
         app.UseStaticFiles()  
            .UseSignalR(fun routes -> 
-                routes.MapHub<GameHub>("game") |> ignore
+                routes.MapHub<GameHub>("/signalr") |> ignore
             )
            .UseStaticFiles() |> ignore
         
