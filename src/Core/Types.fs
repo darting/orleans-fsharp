@@ -30,3 +30,10 @@ type IStore<'State> =
     abstract GetInitialState : unit -> TaskResult<'State, StatusCode>
     abstract GetState : unit -> TaskResult<'State, StatusCode>
     abstract SetState : 'State -> TaskResult<unit, StatusCode>
+
+type Token = string
+
+type User = {
+    ID : string
+    NickName : string
+}

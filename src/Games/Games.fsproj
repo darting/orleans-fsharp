@@ -5,9 +5,10 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <Compile Include="TicTacToe.fs" />
-    <Compile Include="Adventure.fs" />
-    <Compile Include="AdventureSetup.fs" />
+    <Compile Remove="Item.fs" />
+  </ItemGroup>
+  <ItemGroup>
+    <Compile Include="Types.fs" />
   </ItemGroup>
   
   <ItemGroup>

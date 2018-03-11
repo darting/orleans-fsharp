@@ -1,0 +1,16 @@
+﻿<Properties StartupConfiguration="{3A8A1770-D0B0-4D08-B07B-DA74CD7F2F4B}|Default" NuGet.AddPackagesDialog.IncludePrerelease="True">
+  <MonoDevelop.Ide.ItemProperties.src.Host PreferredExecutionTarget="MonoDevelop.Default" />
+  <MonoDevelop.Ide.Workbench ActiveDocument="src/Games/Types.fs">
+    <Files>
+      <File FileName="src/Interfaces/Interfaces.fs" Line="18" Column="5" />
+      <File FileName="src/Grains/Grains.fs" Line="14" Column="30" />
+      <File FileName="src/Games/Types.fs" Line="10" Column="12" />
+    </Files>
+  </MonoDevelop.Ide.Workbench>
+  <MonoDevelop.Ide.Workspace ActiveConfiguration="Debug" />
+  <MonoDevelop.Ide.DebuggingService.Breakpoints>
+    <BreakpointStore />
+  </MonoDevelop.Ide.DebuggingService.Breakpoints>
+  <MonoDevelop.Ide.DebuggingService.PinnedWatches />
+  <MultiItemStartupConfigurations />
+</Properties>
