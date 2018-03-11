@@ -19,6 +19,7 @@ open Orleans.Hosting
 open Orleans.Runtime
 open System.Net
 open Interfaces
+open Hubs
 
 
 module Program =
@@ -50,10 +51,9 @@ module Program =
            .UseGiraffe Web.App.root
         app.UseCors(fun x -> x.AllowAnyHeader().AllowAnyMethod().AllowAnyOrigin() |> ignore) |> ignore
         app.UseStaticFiles()  
-        //    .UseSignalR(fun routes -> 
-        //         routes.MapHub<IndexHub>("index") |> ignore
-        //         routes.MapHub<StreamingHub>("streaming") |> ignore
-        //     )
+           .UseSignalR(fun routes -> 
+                routes.MapHub<GameHub>("game") |> ignore
+            )
            .UseStaticFiles() |> ignore
         
     let configureLogging (loggerBuilder : ILoggingBuilder) =
