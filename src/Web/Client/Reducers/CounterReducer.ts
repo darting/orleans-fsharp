@@ -1,4 +1,4 @@
-import { CounterState } from "./Types";
+import { CounterState } from "../Types";
 
 export enum ActionTypeKeys {
     Inc = "Inc",
