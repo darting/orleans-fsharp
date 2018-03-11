@@ -4,7 +4,6 @@ open Microsoft.Extensions.Caching.Memory
 open FSharp.Control.Tasks.ContextInsensitive
 open Orleans
 open Interfaces
-open Adventure
 open System
 open System.Threading.Tasks
 

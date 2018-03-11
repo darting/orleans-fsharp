@@ -34,7 +34,7 @@ module Program =
                         .UseStaticClustering(fun (x : StaticGatewayListProviderOptions) -> 
                             x.Gateways.Add(endpoint.ToGatewayUri()))
                         .ConfigureApplicationParts(fun parts -> 
-                            parts.AddApplicationPart((typeof<IActor<_,_>>).Assembly)
+                            parts.AddApplicationPart((typeof<IPlayerGrain>).Assembly)
                                  .WithCodeGeneration() |> ignore)
                         .ConfigureLogging(fun logging -> logging.AddConsole() |> ignore)
                         .Build()

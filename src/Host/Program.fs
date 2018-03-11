@@ -7,13 +7,14 @@ open Orleans.Hosting
 open FSharp.Control.Tasks.ContextInsensitive
 open Grains
 open Interfaces
-open Games
+open Adventure
 open System.Net
 
 let addGameStores (services : IServiceCollection) =
-    services.AddSingleton(Adventure.WorldStore.createReducer())
-            .AddSingleton(Adventure.WorldStore.createStore())
-            |> ignore
+    // services.AddSingleton(WorldStore.createReducer())
+    //         .AddSingleton(WorldStore.createStore())
+    //         |> ignore
+    ()
 
 let server () =
     let siloPort = 11111
@@ -26,8 +27,8 @@ let server () =
                         x.PrimarySiloEndpoint <- IPEndPoint(siloAddr, siloPort))
                     .ConfigureEndpoints(siloAddr, siloPort, gatewayPort)
                     .ConfigureApplicationParts(fun parts -> 
-                        parts.AddApplicationPart((typeof<IActor<_,_>>).Assembly)
-                             .AddApplicationPart((typeof<Actor<_,_>>).Assembly)
+                        parts.AddApplicationPart((typeof<IPlayerGrain>).Assembly)
+                             .AddApplicationPart((typeof<PlayerGrain>).Assembly)
                              .WithCodeGeneration() |> ignore)
                     .ConfigureLogging(fun logging -> logging.AddConsole() |> ignore)
                     .ConfigureServices(addGameStores)
