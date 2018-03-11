@@ -3,7 +3,7 @@ import * as React from 'react';
 import { Fabric } from 'office-ui-fabric-react/lib/Fabric';
 import { DefaultButton } from 'office-ui-fabric-react/lib/Button';
 import { SidePanel } from './Components/SidePanels/SidePanel';
-import { ConnectedCounter } from './Counter';
+import { ConnectedCounter } from './Components/Counter';
 
 
 const logger = new signalR.ConsoleLogger(signalR.LogLevel.Trace);

@@ -1,7 +1,7 @@
 import * as React from 'react';
 import { connect } from 'react-redux';
-import { CounterState } from './Types';
-import { inc, dec } from './CounterReducer';
+import { CounterState } from '../Types';
+import { inc, dec } from '../Reducers/CounterReducer';
 
 
 class Counter extends React.Component<any, CounterState> {

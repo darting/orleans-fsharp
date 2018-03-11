@@ -4,7 +4,7 @@ import { Provider } from 'react-redux';
 import { createStore } from 'redux';
 import { initializeIcons } from '@uifabric/icons';
 import { App } from './App';
-import { counterReducer } from './CounterReducer';
+import { counterReducer } from './Reducers/CounterReducer';
 
 function start() {
     initializeIcons();
